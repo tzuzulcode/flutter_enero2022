@@ -14,19 +14,10 @@ class MyApp extends StatelessWidget {
     //MaterialApp es un widget
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.deepPurple,
-      ),
-      home: const MyHomePage(title: 'Tzuzul Code App'),
+      home: Scaffold(
+        appBar: AppBar(title:const Text("Hola mundo, desde flutter")),
+        body: const MyHomePage(title: "Hola mundo, desde flutter"),
+      )
     );
   }
 }
@@ -49,20 +40,35 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    const myText = Text(
-      "Mi primer widget",
-      style: TextStyle(color: Colors.lightBlue,fontSize: 20),
-      textAlign: TextAlign.center,
-    );
+    // Center: Positional Widget
 
-    return myText;
+    
+    // const myText = Text(
+    //   "Mi primer widget",
+    //   style: TextStyle(color: Colors.white,fontSize: 20,backgroundColor: Colors.lime),
+    //   textAlign: TextAlign.center,
+    // );
+    // const center = Center(child: myText);
+
+    // return center;
+
+    return const Center(child: Text(
+      "Mi primer widget",
+      style: TextStyle(backgroundColor: Colors.green, color: Colors.white),
+    ));
   }
 
   // Edu Falcon: State
   // Daniel Vargas
-  // Maximiliano Cabrera
+  // Maximiliano Cabrera *
 
   //Statefull widgets: Cómo funciona el estado
+
+  // Built-in widgets:
+  // Alejandro Cortes*
+  // Kevin Andres*
+  // Mattias Alexandre Duarte *
+  // Julio Mateus
 }
 
 
@@ -76,6 +82,8 @@ class MyHomePage extends StatelessWidget {
 //   _HomePageState createState(){
 //     return _HomePageState();
 //   }
+//  @override
+//  _HomePageState createState() => _HomePageState();
 // }
 
 // class _HomePageState extends State<HomePage>{
