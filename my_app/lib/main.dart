@@ -15,11 +15,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: Scaffold(
-        appBar: AppBar(title:const Text("Hola mundo, desde flutter")),
+        appBar: AppBar(
+          title:const Text("Hola mundo, desde flutter"),
+          backgroundColor: Colors.deepPurple,
+        ),
         body: const MyHomePage(title: "Hola mundo, desde flutter"),
       )
     );
   }
+
 }
 
 class MyHomePage extends StatelessWidget {
@@ -35,6 +39,7 @@ class MyHomePage extends StatelessWidget {
   // always marked "final".
 
   final String title;
+  //final ButtonStyle style = ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20,backgroundColor: Colors.deepPurpleAccent));
 
   // Agregar el contenido de la aplicación
 
@@ -52,10 +57,53 @@ class MyHomePage extends StatelessWidget {
 
     // return center;
 
-    return const Center(child: Text(
-      "Mi primer widget",
-      style: TextStyle(backgroundColor: Colors.green, color: Colors.white),
-    ));
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(40), // Padding a todos los lados
+            child: Column(children: [
+              Text(
+              "Mi primer widget",
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue[800],
+              ),
+            ),
+            const Text(
+              "Mi segundo widget",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.deepPurpleAccent,
+              ),
+            )
+          ],),
+          ),
+          Image.network("https://images.unsplash.com/photo-1586227740560-8cf2732c1531?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=961&q=80"),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20)),
+              onPressed: () {contactUs(context);},
+              child: const Text('Aceptar'),
+              
+            )
+        ],)
+      ),
+    );
+  }
+  void contactUs(BuildContext context){
+    showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(
+        title: const Text("Contactanos..."),
+        content: const Text("Envía un correo a mail@tzuzulcode.com"),
+        actions: [
+          TextButton(
+            onPressed: ()=>Navigator.of(context).pop(), // Navega hacia atras
+            child: const Text("Cerrar")
+          )
+        ],
+      );
+    });
   }
 
   // Edu Falcon: State
