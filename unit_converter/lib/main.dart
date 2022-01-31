@@ -28,10 +28,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _username = "";
+  String _fruit = "";
+  String _message = "";
+  var fruits = ["Orange","Apple","Banana","Strawberry"];
 
   @override
   void initState(){
     _username = "";
+    _fruit = "";
+    _message = "";
     super.initState();
   }
 
@@ -51,9 +56,45 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
             ),
-            Text(_username)
+            Text(_username),
+            DropdownButton(
+              items: fruits.map((String value){
+                return DropdownMenuItem(child: Text(value),value:value);
+              }).toList(),
+              onChanged: (String? newValue){
+                setState(() {
+                  if(newValue!=null){
+                    _fruit = newValue;
+                  }else{
+                    print("newValue es null");
+                  }
+                });
+              },
+              value: _fruit,
+            ),
+            ElevatedButton(
+              onPressed: (){
+                if(_username.isEmpty || _fruit.isEmpty){
+                  return;
+                }else{
+                  buildMessage(_username, _fruit);
+                }
+              }, 
+              child: const Text("Saludar!")
+            ),
+            Text(_message)
           ],)
         ),  
       );
   }
+
+  void buildMessage(String nombre,String fruta){
+    var message = "Hola $nombre, fruta favorita: $fruta";
+    setState(() {
+      _message = message;
+    });
+  }
 }
+
+// Listen to a Stream of data - flutter
+// Stream of data
