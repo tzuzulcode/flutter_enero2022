@@ -1,6 +1,6 @@
 import 'package:cronometer/widgets.dart';
 import 'package:flutter/material.dart';
-
+import 'package:percent_indicator/percent_indicator.dart';
 
 
 void main() {
@@ -36,24 +36,36 @@ class TimerHomePage extends StatelessWidget {
         // the App.build method, and use it to set our appbar title.
         title: Text(title),
       ),
-      body: Column(children: [
-        Row(children: [
-          Padding(padding: EdgeInsets.all(defaultPadding)),
-          Expanded(child: ProductivityButton(color: const Color(0xff009688), text: "Work", onPressed: prueba)),
-          Padding(padding: EdgeInsets.all(defaultPadding)),
-          Expanded(child: ProductivityButton(color: const Color(0xff607D8B), text: "Short break", onPressed: prueba)),
-          Padding(padding: EdgeInsets.all(defaultPadding)),
-          Expanded(child: ProductivityButton(color: const Color(0xff455A64), text: "Long break", onPressed: prueba)),
-        ],
-        ),
-        Expanded(child: Text("Bienvenido"),),
-        Row(children: [
-          Padding(padding: EdgeInsets.all(defaultPadding)),
-          Expanded(child: ProductivityButton(color: const Color(0xff212121), text: "Work", onPressed: prueba)),
-          Padding(padding: EdgeInsets.all(defaultPadding)),
-          Expanded(child: ProductivityButton(color: const Color(0xff009688), text: "Short break", onPressed: prueba)),
-        ])
-      ],)
+      body:LayoutBuilder(builder:(BuildContext context,BoxConstraints constraints){
+        final double availableWidth = constraints.maxWidth;
+        return Column(children: [
+          Row(children: [
+            Padding(padding: EdgeInsets.all(defaultPadding)),
+            Expanded(child: ProductivityButton(color: const Color(0xff009688), text: "Work", onPressed: prueba)),
+            Padding(padding: EdgeInsets.all(defaultPadding)),
+            Expanded(child: ProductivityButton(color: const Color(0xff607D8B), text: "Short break", onPressed: prueba)),
+            Padding(padding: EdgeInsets.all(defaultPadding)),
+            Expanded(child: ProductivityButton(color: const Color(0xff455A64), text: "Long break", onPressed: prueba)),
+          ],
+          ),
+          Expanded(
+            child: CircularPercentIndicator(
+              radius: availableWidth/4,
+              lineWidth: 10,
+              percent: 0.5,
+              progressColor: const Color(0xff009688),
+              center: Text("30:00",style: Theme.of(context).textTheme.headline3),
+
+            ),
+          ),
+          Row(children: [
+            Padding(padding: EdgeInsets.all(defaultPadding)),
+            Expanded(child: ProductivityButton(color: const Color(0xff212121), text: "Work", onPressed: prueba)),
+            Padding(padding: EdgeInsets.all(defaultPadding)),
+            Expanded(child: ProductivityButton(color: const Color(0xff009688), text: "Short break", onPressed: prueba)),
+          ])
+        ],);
+      }),
     ); 
   }
 
