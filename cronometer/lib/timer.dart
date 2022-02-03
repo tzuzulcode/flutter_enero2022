@@ -1,19 +1,22 @@
 import 'dart:async';
-
 import 'package:cronometer/TimerModel.dart';
 
 class CountDownTimer{
   double _radius = 1;
-  bool _isActive = true;
-  Timer timer;
-  Duration _time;
-  Duration _fulltime;
+  bool _isActive = false;
+  int work = 30;
+  int shortBreak = 5;
+  int longBreak = 20;
+  late Timer timer;
+  late Duration _time;
+  late Duration _fulltime;
+
 
   Stream<TimerModel> stream() async*{
-    yield* Stream.periodic(Duration(seconds: 1),(int a){
+    yield* Stream.periodic(const Duration(seconds: 1),(int a){
       String time;
-      if(this._isActive){
-        _time = _time - Duration(seconds: 1);
+      if(_isActive){
+        _time = _time - const Duration(seconds: 1);
         _radius = _time.inSeconds/_fulltime.inSeconds;
         if(_time.inSeconds<=0){
           _isActive = false;
@@ -22,6 +25,29 @@ class CountDownTimer{
       time = returnTime(_time);
       return TimerModel(time,_radius);
     });
+  }
+
+  void stopTimer(){
+    _isActive = false;
+  }
+  void startTimer(){
+    if(_time.inSeconds>0){
+      _isActive = true;
+    }
+  }
+
+  void startWork(){
+    _radius = 1;
+    _time = Duration(minutes: work,seconds: 0);
+    _fulltime = _time;
+  }
+  void startBreak(bool isShort){
+    _radius = 1;
+    _time = Duration(
+      minutes: isShort ? shortBreak : longBreak,
+      seconds: 0
+      );
+    _fulltime = _time;
   }
 
   String returnTime(Duration t){
