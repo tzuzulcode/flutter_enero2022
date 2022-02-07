@@ -29,3 +29,22 @@ class ProductivityButton extends StatelessWidget {
     );
   }
 }
+
+class SettingsButton extends StatelessWidget {
+
+  final Color color;
+  final String text;
+  final int value;
+  const SettingsButton(Key? key ,this.color,this.text,this.value) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      onPressed: ()=>null,
+      child:Text(
+        text,
+        style: const TextStyle(color: Colors.white),
+      ),
+      color: color,
+    );
+  }
+}

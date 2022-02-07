@@ -1,4 +1,5 @@
 import 'package:cronometer/TimerModel.dart';
+import 'package:cronometer/settings.dart';
 import 'package:cronometer/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -32,6 +33,10 @@ class TimerHomePage extends StatelessWidget {
 
   final CountDownTimer timer = CountDownTimer();
 
+  void goToSettings(BuildContext context){
+    Navigator.push(context,MaterialPageRoute(builder: (context)=>SettingsScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -47,9 +52,16 @@ class TimerHomePage extends StatelessWidget {
         // the App.build method, and use it to set our appbar title.
         title: Text(title),
         actions: [
-          PopupMenuButton<String>(itemBuilder: (BuildContext context){
-            return menuItems.toList();
-          },)
+          PopupMenuButton<String>(
+            itemBuilder: (BuildContext context){
+              return menuItems.toList();
+            },
+            onSelected: (s){
+              if(s=="Settings"){
+                goToSettings(context);
+              }
+            },
+          )
         ],
       ),
       body:LayoutBuilder(builder:(BuildContext context,BoxConstraints constraints){
@@ -104,9 +116,5 @@ class TimerHomePage extends StatelessWidget {
         ],);
       }),
     ); 
-  }
-
-  void prueba(){
-
   }
 }
