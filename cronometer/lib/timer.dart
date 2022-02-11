@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cronometer/TimerModel.dart';
 import 'package:cronometer/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CountDownTimer{
   double _radius = 1;
@@ -12,6 +13,10 @@ class CountDownTimer{
   late Timer timer;
   late Duration _time;
   late Duration _fulltime;
+
+  static const String WORKTIME = "worktime";
+  static const String SHORTBREAK = "shortbreak";
+  static const String LONGBREAK = "longbreak";
 
 
   Stream<TimerModel> stream() async*{
@@ -38,7 +43,8 @@ class CountDownTimer{
     }
   }
 
-  void startWork(){
+  void startWork() async{
+    await readSettings();
     _radius = 1;
     _time = Duration(minutes: work,seconds: 0);
     _fulltime = _time;
@@ -50,6 +56,17 @@ class CountDownTimer{
       seconds: 0
       );
     _fulltime = _time;
+  }
+
+  Future readSettings() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? workTime = prefs.getInt(WORKTIME);
+    int? shortBreak = prefs.getInt(SHORTBREAK);
+    int? longBreak = prefs.getInt(LONGBREAK);
+
+    work = workTime ?? 30;
+    this.shortBreak = shortBreak ?? 5;
+    this.longBreak = longBreak ?? 20;
   }
 
   String returnTime(Duration t){

@@ -60,36 +60,36 @@ class _SettingsState extends State<Settings> {
           Text("Work",style:textStyle ,),
           Text(""),
           Text(""),
-          const SettingsButton(null, Color(0xff455A64), "-", -1),
+          SettingsButton(null, const Color(0xff455A64),"-",-1,WORKTIME,updateSettings),
           TextField(
             style: textStyle,
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
             controller: textWork,
           ),
-          const SettingsButton(null, Color(0xff009688), "+", 1),
+          SettingsButton(null, const Color(0xff009688), "+", 1,WORKTIME,updateSettings),
           Text("Short",style:textStyle ,),
           Text(""),
           Text(""),
-          const SettingsButton(null, Color(0xff455A64), "-", -1),
+          SettingsButton(null, const Color(0xff455A64), "-", -1,SHORTBREAK,updateSettings),
           TextField(
             style: textStyle,
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
             controller: textShort,
           ),
-          const SettingsButton(null, Color(0xff009688), "+", 1),
+          SettingsButton(null, const Color(0xff009688), "+", 1,SHORTBREAK,updateSettings),
           Text("Long",style:textStyle ,),
           Text(""),
           Text(""),
-          const SettingsButton(null, Color(0xff455A64), "-", -1),
+          SettingsButton(null, const Color(0xff455A64), "-", -1,LONGBREAK,updateSettings),
           TextField(
             style: textStyle,
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
             controller: textLong,
           ),
-          const SettingsButton(null, Color(0xff009688), "+", 1),
+          SettingsButton(null, const Color(0xff009688), "+", 1,LONGBREAK,updateSettings),
         ],
         padding: const EdgeInsets.all(20),
       )
@@ -101,6 +101,15 @@ class _SettingsState extends State<Settings> {
     int? workTime = prefs.getInt(WORKTIME);
     int? shortBreak = prefs.getInt(SHORTBREAK);
     int? longBreak = prefs.getInt(LONGBREAK);
+    if(workTime==null){
+      await prefs.setInt(WORKTIME, 30);
+    }
+    if(shortBreak==null){
+      await prefs.setInt(SHORTBREAK, 5);
+    }
+    if(longBreak==null){
+      await prefs.setInt(LONGBREAK, 20);
+    }
 
     setState(() {
       if(workTime!= null){
