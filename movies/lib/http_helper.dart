@@ -1,11 +1,25 @@
+import 'dart:convert';
+import 'dart:io';
+
+//Instalamos http: flutter pub add http
 import 'package:http/http.dart' as http;
+import 'package:movies/movie.dart';
 
 
 class HttpHelper{
-  final Uri baseUrl = Uri(path: "https://backendtzuzulcode.wl.r.appspot.com/movies");
+  final Uri baseUrl = Uri.parse("https://backendtzuzulcode.wl.r.appspot.com/movies");
 
-  Future<String> getMovies() async{
+  Future<List> getMovies() async{
     http.Response result = await http.get(baseUrl);
-    return "";
+
+    if(result.statusCode == HttpStatus.ok){
+      final moviesMap = jsonDecode(result.body);
+      List movies = moviesMap.map((movie)=>{
+        Movie.fromJSON(movie)
+      });
+      return movies;
+    }
+    
+    return [];
   }
 }
