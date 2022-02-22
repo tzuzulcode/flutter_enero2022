@@ -14,9 +14,7 @@ class HttpHelper{
 
     if(result.statusCode == HttpStatus.ok){
       final moviesMap = jsonDecode(result.body);
-      List movies = moviesMap.map((movie)=>{
-        Movie.fromJSON(movie)
-      });
+      List movies = moviesMap.map((movie)=>Movie.fromJSON(movie)).toList();
       return movies;
     }
     
