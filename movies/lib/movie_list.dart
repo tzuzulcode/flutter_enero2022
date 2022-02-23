@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/http_helper.dart';
+import 'package:movies/movie_detail.dart';
 
 
 class MovieList extends StatefulWidget {
@@ -14,7 +15,6 @@ class _MovieListState extends State<MovieList> {
   late HttpHelper helper;
   late List movies;
   late int itemCount;
-  
 
   @override
   void initState() {
@@ -28,7 +28,14 @@ class _MovieListState extends State<MovieList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Movies App"),),
+      appBar: AppBar(
+        title: Text("Movies App"),
+        actions: [
+          IconButton(onPressed: (){
+            //TODO: Añadir funcionalidad de búsqueda con la API
+          }, icon: Icon(Icons.search))
+        ],
+      ),
       body:ListView.builder(
         itemCount: itemCount,
         itemBuilder: (BuildContext context,int position){
@@ -41,6 +48,10 @@ class _MovieListState extends State<MovieList> {
               leading: CircleAvatar(
                 backgroundImage: NetworkImage(movies[position].img)
               ),
+              onTap: (){
+                MaterialPageRoute route = MaterialPageRoute(builder: (_)=>MovieDetail(null, movies[position]));
+                Navigator.push(context, route);
+              },
             ),
           );
         })
