@@ -28,20 +28,42 @@ class _EventListState extends State<EventList> {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   List<EventDetail> details = [];
 
+  @override
+  void initState() {
+    if(mounted){
+      getDetailsList()
+      .then((data){
+        setState(() {
+          details = data;
+        });
+      });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+
+    return ListView.builder(
+      itemCount: details.length,
+      itemBuilder: (context,position){
+        String subtitle = "Date: ${details[position].date} - Start: ${details[position].startTime} - End: ${details[position].endTime}";
+        return ListTile(
+          title: Text(details[position].description),
+          subtitle: Text(subtitle),
+        );
+      },
     );
   }
 
   Future getDetailsList() async{
     var data = await db.collection("events").get();
     details = data.docs.map((doc){
-      var eventDetail = EventDetail.fromMap(doc);
+      var eventDetail = EventDetail.fromMap(doc.data());
       eventDetail.id = doc.id;
       return eventDetail;
     }).toList();
+
+    return details;
   }
 }

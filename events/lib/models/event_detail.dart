@@ -1,13 +1,13 @@
 import 'dart:ffi';
 
 class EventDetail{
-  String id;
+  String? id;
   String _description;
   String _date;
   String _startTime;
   String _endTime;
   String _speaker;
-  Bool _isFavorite;
+  bool _isFavorite;
   
 
   EventDetail(
@@ -25,10 +25,9 @@ class EventDetail{
   String get startTime=>_startTime;
   String get endTime=>_endTime;
   String get speaker=>_speaker;
-  Bool get isFavorite=>_isFavorite;
+  bool get isFavorite=>_isFavorite;
 
   EventDetail.fromMap(dynamic obj):
-    id = obj['id'],
     _description = obj['description'],
     _date= obj['date'],
     _startTime= obj['startTime'],
@@ -38,7 +37,6 @@ class EventDetail{
 
   Map<String,dynamic> toMap(){
     var map = Map<String,dynamic>();
-    map['id'] =id;
     map['description'] =_description;
     map['date'] =_date;
     map['startTime'] =_startTime;
