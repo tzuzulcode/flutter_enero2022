@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../shared/authentication.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({ Key? key }) : super(key: key);
@@ -9,13 +10,21 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _isLogin = true;
-  // String _userId;
-  // String _password;
-  // String _email;
-  // String _message;
+  late String _userId;
+  late String _password;
+  late String _email;
+  late String _message;
 
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPassword = TextEditingController();
+
+  late Authentication authentication;
+
+  @override
+  void initState() {
+    authentication = Authentication();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,19 +82,22 @@ class _LoginScreenState extends State<LoginScreen> {
       padding:const EdgeInsets.only(top: 20),
       child: Container(
         height: 50,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)
+        child: Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)
+              ),
+              elevation: 3,
             ),
-            elevation: 3
-          ),
-          child: Text(buttonText),
-          onPressed: (){
+            child: Text(buttonText),
+            onPressed: (){
 
-          },
-        ),
+            },
+          ),
+        )
       ),
     );
   }
@@ -102,13 +114,31 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget validationMessage(){
-    return Text("Error",
-      style: const TextStyle(
+    return const Text("Error",
+      style: TextStyle(
         fontSize: 14,
         color: Colors.red,
         fontWeight: FontWeight.bold
       ),
     );
+  }
+
+  Future submit() async{
+    setState(() {
+      _message = "";
+    });
+
+    try{
+      if(_isLogin){
+        _userId = await authentication.login(txtEmail.text, txtPassword.text);
+        print("Login for user $_userId");
+      }else{
+        _userId = await authentication.signUp(txtEmail.text, txtPassword.text);
+        print("Sign up for user $_userId");
+      }
+
+      
+    }
   }
   
 }

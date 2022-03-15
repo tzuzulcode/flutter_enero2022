@@ -1,5 +1,4 @@
-import 'package:events/screens/event_screen.dart';
-import 'package:events/screens/login_screen.dart';
+import 'package:events/screens/launch_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.indigo,
       ),
-      home: const LoginScreen()
+      home: const LaunchScreen()
     );
   }
 }
