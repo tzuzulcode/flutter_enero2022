@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:events/models/event_detail.dart';
+import 'package:events/screens/login_screen.dart';
+import 'package:events/shared/authentication.dart';
 import 'package:flutter/material.dart';
 
 class EventScreen extends StatelessWidget {
@@ -7,9 +9,21 @@ class EventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Authentication auth = new Authentication();
     return Scaffold(
       appBar: AppBar(
         title: Text("Event"),
+        actions: [
+          IconButton(
+            onPressed: (){
+              auth.signOut()
+              .then((result){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+              });
+            }, 
+            icon: const Icon(Icons.exit_to_app)
+          )
+        ],
       ),
       body: EventList(),
     );

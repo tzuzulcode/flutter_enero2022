@@ -1,3 +1,4 @@
+import 'package:events/screens/event_screen.dart';
 import 'package:flutter/material.dart';
 import '../shared/authentication.dart';
 
@@ -10,10 +11,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _isLogin = true;
-  late String _userId;
+  late String? _userId;
   late String _password;
   late String _email;
-  late String _message;
+  String _message = "";
 
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPassword = TextEditingController();
@@ -93,9 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
               elevation: 3,
             ),
             child: Text(buttonText),
-            onPressed: (){
-
-            },
+            onPressed: submit,
           ),
         )
       ),
@@ -114,8 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget validationMessage(){
-    return const Text("Error",
-      style: TextStyle(
+    return Text(_message,
+      style: const TextStyle(
         fontSize: 14,
         color: Colors.red,
         fontWeight: FontWeight.bold
@@ -137,7 +136,14 @@ class _LoginScreenState extends State<LoginScreen> {
         print("Sign up for user $_userId");
       }
 
-      
+      if(_userId!=null){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>EventScreen()));
+      }
+    }catch(error){
+      print("Error $error");
+      setState(() {
+        _message = error.toString();
+      });
     }
   }
   
