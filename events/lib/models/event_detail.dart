@@ -5,7 +5,6 @@ class EventDetail{
   String _startTime;
   String _endTime;
   String _speaker;
-  bool _isFavorite;
   
 
   EventDetail(
@@ -14,8 +13,7 @@ class EventDetail{
     this._date,
     this._startTime,
     this._endTime,
-    this._speaker,
-    this._isFavorite
+    this._speaker
   );
 
   String get description=>_description;
@@ -23,15 +21,13 @@ class EventDetail{
   String get startTime=>_startTime;
   String get endTime=>_endTime;
   String get speaker=>_speaker;
-  bool get isFavorite=>_isFavorite;
 
   EventDetail.fromMap(dynamic obj):
     _description = obj['description'],
     _date= obj['date'],
     _startTime= obj['startTime'],
     _endTime= obj['endTime'],
-    _speaker= obj['speaker'],
-    _isFavorite= obj['isFavorite'];
+    _speaker= obj['speaker'];
 
   Map<String,dynamic> toMap(){
     var map = Map<String,dynamic>();
@@ -40,7 +36,6 @@ class EventDetail{
     map['startTime'] =_startTime;
     map['endTime'] =_endTime;
     map['speaker'] =_speaker;
-    map['isFavorite'] =_isFavorite;
 
     return map;
   }

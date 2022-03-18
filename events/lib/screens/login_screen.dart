@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if(_userId!=null){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>EventScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>EventScreen(null,_userId!)));
       }
     }catch(error){
       print("Error $error");

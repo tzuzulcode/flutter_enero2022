@@ -1,25 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Favorite{
-  String? _id;
-  String _eventId;
-  String _userId;
-  Favorite(this._id,this._eventId,this._userId);
+  String? id;
+  String eventId;
+  String userId;
+  Favorite(this.id,this.eventId,this.userId);
 
-  Favorite.map(dynamic obj):
-    _id = obj["id"],
-    _eventId = obj["eventId"],
-    _userId = obj["userId"];
+  Favorite.map(dynamic obj,this.id):
+    eventId = obj["eventId"],
+    userId = obj["userId"];
   
   Map<String,dynamic> toMap(){
     Map<String,dynamic> map = {};
 
-    if(_id!=null){
-      map['id'] = _id;
+    if(id!=null){
+      map['id'] = id;
     }
 
-    map["eventId"] = _eventId;
-    map['userId'] = _userId;
+    map["eventId"] = eventId;
+    map['userId'] = userId;
 
     return map;
   }

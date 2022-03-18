@@ -23,7 +23,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
     .then((user){
       MaterialPageRoute route;
       if(user!=null){
-        route = MaterialPageRoute(builder: (context)=>EventScreen());
+        route = MaterialPageRoute(builder: (context)=>EventScreen(null,user.uid));
       }else{
         route = MaterialPageRoute(builder: (context)=>LoginScreen());
       }
