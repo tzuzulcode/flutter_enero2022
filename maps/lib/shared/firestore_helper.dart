@@ -4,7 +4,7 @@ import 'package:maps/models/place.dart';
 class FirestoreHelper{
   static final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  static Future addPlace(Place place,String uid){
+  static Future addPlace(Place place){
     var result = db.collection("places").add(place.toMap())
     .then((value) => print(value))
     .catchError((error)=>print(error));

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maps/firebase_options.dart';
+import 'package:maps/screens/launch_screen.dart';
 import 'package:maps/screens/login_screen.dart';
 
 void main() async{
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      home: const LaunchScreen(),
     );
   }
 }
