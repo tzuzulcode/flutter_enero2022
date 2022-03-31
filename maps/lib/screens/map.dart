@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps/shared/firestore_helper.dart';
 import 'package:maps/widgets/place_dialog.dart';
 import '../models/place.dart';
+import 'dart:async';
 
 
 class MainMap extends StatefulWidget {
@@ -14,8 +15,8 @@ class MainMap extends StatefulWidget {
   State<MainMap> createState() => _MainMapState();
 }
 
-class _MainMapState extends State<MainMap> {
-
+class _MainMapState extends State<MainMap> with WidgetsBindingObserver {
+  Completer<GoogleMapController> _controller = Completer();
   List<Marker> markers = [];
 
   final CameraPosition position = const CameraPosition(
@@ -25,6 +26,7 @@ class _MainMapState extends State<MainMap> {
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addObserver(this);
     addMarker(41.9028, 12.4964, "current", "Estamos aquí");
     FirestoreHelper.getUserPlaces(widget.uid)
     .then((places){
@@ -50,6 +52,7 @@ class _MainMapState extends State<MainMap> {
           markers: Set<Marker>.of(markers),
         )
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add_location),
         onPressed: (){
@@ -61,6 +64,13 @@ class _MainMapState extends State<MainMap> {
         }
       ),
     );
+  }
+
+  void onMapCreated(GoogleMapController controller) {
+    controller.setMapStyle(Utils.mapStyles);
+    if (!_controller.isCompleted) {
+      _controller.complete(controller);
+    }
   }
 
   void addMarker(latitude,long, String markerId, String markerTitle){
@@ -78,4 +88,56 @@ class _MainMapState extends State<MainMap> {
       markers = markers;
     });
   }
+
+  // lifecycle
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.inactive:
+        print('appLifeCycleState inactive');
+        break;
+      case AppLifecycleState.resumed:
+        final GoogleMapController controller = await _controller.future;
+        onMapCreated(controller);
+        print('appLifeCycleState resumed');
+        break;
+      case AppLifecycleState.paused:
+        print('appLifeCycleState paused');
+        break;
+      case AppLifecycleState.detached:
+        print('appLifeCycleState detached');
+        break;
+    }
+  }
+}
+
+class Utils {
+  static String mapStyles = '''[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  .......
+]''';
 }
