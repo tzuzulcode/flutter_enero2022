@@ -47,7 +47,40 @@ class _PlacesListState extends State<PlacesList> {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: places.length,
-      itemBuilder: 
+      itemBuilder: (BuildContext context,int index){
+        Place place = places[index];
+
+        return Dismissible(
+          child: ListTile(
+            title:Text(place.name),
+            trailing: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: (){
+                PlaceDialog dialog = PlaceDialog(place,false);
+                showDialog(
+                  context: context, 
+                  builder: (context)=>dialog.buildAlert(context)
+                );
+              },
+            ),
+          ),
+          key: Key(place.id!),
+          onDismissed: (direction){
+            FirestoreHelper.deletePlace(place.id!);
+            setState(() {
+              places.removeAt(index);
+            });
+
+            ScaffoldMessenger.of(context)
+              .showSnackBar(
+                SnackBar(
+                  content: Text("${place.name} eliminado")
+                )
+              );
+          },
+        );
+      },
+      
     );
   }
 }

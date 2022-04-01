@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps/shared/firestore_helper.dart';
+import 'package:maps/widgets/manage_places.dart';
 import 'package:maps/widgets/place_dialog.dart';
 import '../models/place.dart';
 import 'dart:async';
@@ -42,10 +43,42 @@ class _MainMapState extends State<MainMap> with WidgetsBindingObserver {
     super.initState();
   }
 
+  FutureOr refreshData(dynamic value){
+
+    print("Refresh");
+    FirestoreHelper.getUserPlaces(widget.uid)
+    .then((places){
+
+      for(Place place in places){
+        addMarker(place.lat, place.lon, place.id!, place.name);
+      }
+      
+      setState(() {
+        print("Update");
+        markers = markers;
+      });
+    });
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Mapas")),
+      appBar: AppBar(
+        title: Text("Mapas"),
+        actions: [
+          IconButton(
+            onPressed: (){
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (context)=>ManagePlaces(widget.uid, null)
+              );
+
+              Navigator.push(context, route).then(refreshData);
+            }, 
+            icon: Icon(Icons.list)
+          )
+        ],
+      ),
       body: Container(
         child: GoogleMap(
           initialCameraPosition: position,
@@ -58,8 +91,8 @@ class _MainMapState extends State<MainMap> with WidgetsBindingObserver {
         onPressed: (){
           Place place = Place("new", "", 0, 0, "", widget.uid);
 
-          PlaceDialog dialog = PlaceDialog(place);
-          showDialog(context: context, builder: (context)=>dialog.buildAlert(context));
+          PlaceDialog dialog = PlaceDialog(place,true);
+          showDialog(context: context, builder: (context)=>dialog.buildAlert(context)).then(refreshData);
 
         }
       ),

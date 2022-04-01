@@ -21,4 +21,12 @@ class FirestoreHelper{
 
     return places;
   }
+
+  static Future updatePlace(Place place) async{
+    await db.collection("places").doc(place.id).update(place.toMap());
+  }
+
+  static Future deletePlace(String id) async{
+    await db.collection("places").doc(id).delete();
+  }
 }

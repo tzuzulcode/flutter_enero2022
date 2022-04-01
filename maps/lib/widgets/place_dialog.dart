@@ -8,8 +8,9 @@ class PlaceDialog{
   final txtLon = TextEditingController();
 
   late final Place place;
+  final bool newplace;
 
-  PlaceDialog(this.place);
+  PlaceDialog(this.place,this.newplace);
 
 
   Widget buildAlert(BuildContext context){
@@ -46,7 +47,11 @@ class PlaceDialog{
                 place.lat = double.parse(txtLat.text);
                 place.lon = double.parse(txtLon.text);
 
-                FirestoreHelper.addPlace(place);
+                if(newplace){
+                  FirestoreHelper.addPlace(place);
+                }else{
+                  FirestoreHelper.updatePlace(place);
+                }
 
                 Navigator.pop(context);
               }, 
