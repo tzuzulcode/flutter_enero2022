@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps/shared/firestore_helper.dart';
+import '../shared/database_helper.dart';
 import 'package:maps/widgets/manage_places.dart';
 import 'package:maps/widgets/place_dialog.dart';
 import '../models/place.dart';
@@ -25,40 +26,50 @@ class _MainMapState extends State<MainMap> with WidgetsBindingObserver {
     zoom: 10
   );
 
+  void updateData(List<Place> places){
+    addMarker(places);
+  }
+
   @override
   void initState() {
-    WidgetsBinding.instance!.addObserver(this);
-    addMarker(41.9028, 12.4964, "current", "Estamos aquí");
-    FirestoreHelper.getUserPlaces(widget.uid)
-    .then((places){
 
-      for(Place place in places){
-        addMarker(place.lat, place.lon, place.id!, place.name);
-      }
+    markers = [];
+
+    DatabaseHelper.listenPlaces(widget.uid, updateData);
+
+    WidgetsBinding.instance!.addObserver(this);
+    // FirestoreHelper.getUserPlaces(widget.uid)
+    // .then((places){
+
+    //   for(Place place in places){
+    //     addMarker(place.lat, place.lon, place.id!, place.name);
+    //   }
       
-      setState(() {
-        markers = markers;
-      });
-    });
+    //   setState(() {
+    //     markers = markers;
+    //   });
+    // });
     super.initState();
   }
 
-  FutureOr refreshData(dynamic value){
+  // FutureOr refreshData(dynamic value){
 
-    print("Refresh");
-    FirestoreHelper.getUserPlaces(widget.uid)
-    .then((places){
+  //   print("Refresh");
+  //   FirestoreHelper.getUserPlaces(widget.uid)
+  //   .then((places){
 
-      for(Place place in places){
-        addMarker(place.lat, place.lon, place.id!, place.name);
-      }
+  //     setState(() {
+  //       markers = [];
+  //     });
+
+  //     addMarker(41.9028, 12.4964, "current", "Estamos aquí");
+
+  //     for(Place place in places){
+  //       addMarker(place.lat, place.lon, place.id!, place.name);
+  //     }
       
-      setState(() {
-        print("Update");
-        markers = markers;
-      });
-    });
-  }
+  //   });
+  // }
   
 
   @override
@@ -73,7 +84,7 @@ class _MainMapState extends State<MainMap> with WidgetsBindingObserver {
                 builder: (context)=>ManagePlaces(widget.uid, null)
               );
 
-              Navigator.push(context, route).then(refreshData);
+              Navigator.push(context, route);
             }, 
             icon: Icon(Icons.list)
           )
@@ -92,7 +103,7 @@ class _MainMapState extends State<MainMap> with WidgetsBindingObserver {
           Place place = Place("new", "", 0, 0, "", widget.uid);
 
           PlaceDialog dialog = PlaceDialog(place,true);
-          showDialog(context: context, builder: (context)=>dialog.buildAlert(context)).then(refreshData);
+          showDialog(context: context, builder: (context)=>dialog.buildAlert(context));
 
         }
       ),
@@ -106,19 +117,35 @@ class _MainMapState extends State<MainMap> with WidgetsBindingObserver {
     }
   }
 
-  void addMarker(latitude,long, String markerId, String markerTitle){
-    final marker = Marker(
-      markerId: MarkerId(markerId),
-      position: LatLng(latitude,long),
-      infoWindow: InfoWindow(title: markerTitle),
-      icon: (markerId=="current")?BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed):
-      BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
+  void addMarker(List<Place> places){
+    List<Marker> markersList = [];
+    
+    Marker actual = Marker(
+      markerId: const MarkerId("current"),
+      position: const LatLng(41.9028, 12.4964),
+      infoWindow: const InfoWindow(title: "Estamos aquí"),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed)
     );
 
-    markers.add(marker);
+    markersList.add(actual);
+
+    print(places);
+
+    for(Place place in places){
+      final marker = Marker(
+        markerId: MarkerId(place.id!),
+        position: LatLng(place.lat,place.lon),
+        infoWindow: InfoWindow(title: place.name),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
+      );
+      markersList.add(marker);
+    }
+
+
+    print(markersList);
 
     setState(() {
-      markers = markers;
+      markers = markersList;
     });
   }
 

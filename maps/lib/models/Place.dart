@@ -23,8 +23,8 @@ class Place{
 
   Place.fromMap(dynamic obj,this.id):
     name=obj["name"],
-    lat = obj["lat"],
-    lon = obj["lon"],
+    lat = double.parse(obj["lat"].toString()),
+    lon = double.parse(obj["lat"].toString()),
     image = obj["image"],
     userId = obj["userId"];
 

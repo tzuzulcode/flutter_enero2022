@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../shared/firestore_helper.dart';
+import '../shared/database_helper.dart';
 import '../models/place.dart';
 
 class PlaceDialog{
@@ -49,6 +50,7 @@ class PlaceDialog{
 
                 if(newplace){
                   FirestoreHelper.addPlace(place);
+                  DatabaseHelper.addPlace(place);
                 }else{
                   FirestoreHelper.updatePlace(place);
                 }

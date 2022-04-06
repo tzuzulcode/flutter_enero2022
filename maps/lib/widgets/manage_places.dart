@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../shared/database_helper.dart';
 import '../shared/firestore_helper.dart';
 import './place_dialog.dart';
 import '../models/place.dart';
@@ -28,19 +29,26 @@ class _PlacesListState extends State<PlacesList> {
 
   List<Place> places = [];
 
+  void updateData(List<Place> places){
+    setState(() {
+      this.places = places;
+    });
+  }
+
 
   @override
   void initState() {
     // TODO: implement initState
 
-    FirestoreHelper.getUserPlaces(widget.uid)
-    .then((places){
-      setState(() {
-        this.places = places;
-      });
-    })
-    ;
+    // FirestoreHelper.getUserPlaces(widget.uid)
+    // .then((places){
+    //   setState(() {
+    //     this.places = places;
+    //   });
+    // })
+    // ;
     super.initState();
+    DatabaseHelper.listenPlaces(widget.uid, updateData);
   }
 
   @override
@@ -66,10 +74,11 @@ class _PlacesListState extends State<PlacesList> {
           ),
           key: Key(place.id!),
           onDismissed: (direction){
-            FirestoreHelper.deletePlace(place.id!);
-            setState(() {
-              places.removeAt(index);
-            });
+            //FirestoreHelper.deletePlace(place.id!);
+            DatabaseHelper.deletePlace(place);
+            // setState(() {
+            //   places.removeAt(index);
+            // });
 
             ScaffoldMessenger.of(context)
               .showSnackBar(
